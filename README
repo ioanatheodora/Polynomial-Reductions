@@ -1,0 +1,90 @@
+#Analiza Algoritmilor - Tema 2
+___Popa Ioana Theodora___
+___323 CD___
+
+
+## Rezolvarea Problemelor si Reduceri Polinomiale
+Consideram graful G = (V, E), unde V este multimea nodurilor, iar E este multimea
+muchiilor.
+
+Fiecare dintre cele trei probleme se poate reduce la problema SAT in felul urmator:
+
+
+    Retele
+Pentru problema "Retele", solutia poate fi vazuta ca problema K-clicii, trebuind
+sa gasim o clica de k varfuri. Astfel, problema clicii poate fi redusa la problema SAT
+folosind urmatoarele tipuri de clauze:
+* Trebuie sa gasim exact un nod v din V care sa faca parte din clica
+* Pentru fiecare non-muchie (v, w), cele doua noduri nu se pot gasi in clica
+* Acelasi nod nu se poate afla pe pozitii diferite in clica
+* Doua noduri diferite nu se pot afla pe aceeasi pozitie in clica
+
+
+    Reclame
+Pentru aceasta problema, solutia poate fi vazuta ca rezolvarea problemei de acoperire
+cu varfuri, nestiind initial numarul minim de varfuri cu care vom efectua acoperirea.
+Din acest motiv, vom cauta numarul minim de varfuri prin rezolvarea problemei SAT
+cu K varfuri, K = 1  la inceput, incrementandu-l pana cand rezultatul va fi "True".
+
+Definim urmatoarele tipuri de clauze:
+* Trebuie sa gasim exact un nod v din V care sa faca parte din acoperire
+* Orice muchie trebuie sa aiba cel putin un capat in acoperire
+* Acelasi nod nu se poate afla pe pozitii diferite in clica
+* Doua noduri diferite nu se pot afla pe aceeasi pozitie in clica
+
+
+    Registre
+Cea de-a treia problema poate fi definita ca problema k-colorarii, fiecarei variabile
+asociindu-i o "culoare", tradus in problema noastra ca un registru.
+
+Avem urmatoarele tipuri de clauze pentru aceasta reducere:
+* Doua noduri adiacente nu pot avea aceeasi culoare
+* Fiecare nod trebuie sa aiba o coloare asociata
+* Acelasi nod nu poate avea mai mult de doua culori asociate
+
+
+## Structura si clase
+
+Am creat clasele Task1, Task2, Task 3 care extind clasa abstracta Task, urmand ca metodele
+sa fie implementate in functie de rezolvarea problemei.
+
+Pentru a stoca graful, am ales o *matrice de adiacenta*, gasind-o cea mai utila
+pentru implementarea pe care am ales-o, fiind necesar sa accesez elementele intr-un timp
+cat mai scurt, accesarea in matrice efectuandu-se intr-o complexitate de O(1).
+
+De asemenea, variabilele pentru clauze au fost retinute intr-o matrice de N x K, unde
+N este numarul de noduri al grafului si K este numarul pentru care apelam problema
+SAT, acestea fiind definite de numere de la 1 la N*K.
+
+## Implementare
+Citirea datelor si scrierea output-ului se realizeaza pentru fiecare problema in mod
+asemanator.
+
+Metoda "formulateOracleQuestion" este diferita pentru fiecare problema, aici fiind
+construit fisierul de input pentru problema SAT, adica fiind definite clauzele asa
+cum a fost explicat la sectiunea *Rezolvarea Problemelor si Reduceri Polinomiale*.
+
+Metoda "solve" creeaza numele variabilelor si le stocheaza intr-o matrice, apeland
+ulterior "askOracle" (in cazul problemei "Reclame", apeland-o pana cand cel
+mai mic numar pentru care se returneaza "True" este gasit).
+
+Interpretarea solutiilor se realizeaza prin a gasi nodul careia este asociata
+variabila din clauze pentru task-urile 1 si 2, iar pentru task-ul 3 aflandu-se registrul
+asociat variabilei respective
+
+## Complexitati
+
+    Retele
+Complexiatea reducerii polinomiale este determinata de cele 4 for-uri pentru
+a formula clauzele, fiind egala cu  O(N * K) + O(N^2 * K^2) + O(N * K^2) + O(N^2 * K),
+deci complexitatea este O(N^2 + K^2).
+
+    Reclame Buclucase
+Complexiatea reducerii polinomiale este determinata de cele 4 for-uri pentru
+a formula clauzele, fiind egala cu  O(N * K) + O(N^2 * K) + O(N * K^2) + O(N^2 * K),
+deci complexitatea este O(N^2 * K), K <= N.
+
+    Alocarea Registrilor
+Complexiatea reducerii polinomiale este determinata de cele 4 for-uri pentru
+a formula clauzele, fiind egala cu O(N^2 * K) +  O(N * K) + O(N * K^2),
+deci complexitatea este O(N^2 * K), K <= N.
